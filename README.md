@@ -1,4 +1,4 @@
-Modified by Nicole
+
 
 
 # Technical support ticket classification using Watson Natural Language Classifier
