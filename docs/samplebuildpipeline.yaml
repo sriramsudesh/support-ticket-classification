@@ -1,0 +1,40 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    pipeline.alpha.openshift.io/uses: '[{"name": "watson-classification", "namespace": "", "kind": "DeploymentConfig"}]'
+  creationTimestamp: '2019-10-13T05:03:55Z'
+  labels:
+    app: watson-classification
+  name: nodejs-mvp-pipeline
+  namespace: sample
+  resourceVersion: '1966529'
+  selfLink: >-
+    /apis/build.openshift.io/v1/namespaces/sample/buildconfigs/nodejs-mvp-pipeline
+  uid: db4accef-ed76-11e9-86d2-0641c54236fd
+spec:
+  nodeSelector: {}
+  output: {}
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    type: None
+  strategy:
+    jenkinsPipelineStrategy:
+      jenkinsfile: |-
+        node {
+          stage('buildImage'){
+            openshiftBuild(buildConfig: 'watson-classification', showBuildLogs: 'true')
+          }
+          stage('deployApplication'){
+            openshiftDeploy(deploymentConfig: 'watson-classification')
+          }
+        }
+    type: JenkinsPipeline
+  triggers:
+    - github:
+        secret: a04aabf8d0002f77
+      type: GitHub
+status:
+  lastVersion: 8
